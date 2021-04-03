@@ -41,7 +41,7 @@ class moderation(commands.Cog):
             await channel.send(embed=embed)
 
     @commands.command() #команда СЕРВИСЫ
-    @commands.has_permissions(kick_members=True)
+    @commands.has_permissions(ban_members=True)
     async def бан(self, ctx, member: discord.Member=None):
         if member is None:
             channel = ctx.message.channel
@@ -71,6 +71,11 @@ class moderation(commands.Cog):
             embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
             embed.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=f"Обработала Няшка Кибер-Доки!")
             await channel.send(embed=embed)
+
+    @commands.command(pass_context=True)
+    async def ник(self, ctx, nick):
+        await ctx.message.author.edit(nick=nick)
+        await ctx.send(f'Ваш псевдоним изменен на ' + nick)
 
 def setup(bot):
     bot.add_cog(moderation(bot))
