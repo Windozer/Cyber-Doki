@@ -1,6 +1,8 @@
 import configparser
 import asyncio
 import discord
+import sys
+import traceback
 from discord.ext import commands
 
 
@@ -18,7 +20,7 @@ async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= "Ня, я слежу за " + str(len(client.guilds)) + " серверами!"))
     print('✅Бот запущен!')
 
-initial_extensions = ['modules.voice']
+initial_extensions = ['modules.voice','modules.weather','modules.info','modules.vimeworld','modules.user','modules.minecraft','modules.moderation','modules.entertainment']
 
 if __name__ == '__main__':
     for extension in initial_extensions:
@@ -28,63 +30,6 @@ if __name__ == '__main__':
         except Exception as e:
             print(f'Failed to load extension {extension}.', file=sys.stderr)
             traceback.print_exc()
-
-initial_extensions = ['modules.weather']
-
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        try:
-            client.load_extension(extension)
-            print(f'{extension} подгружен!')
-        except Exception as e:
-            print(f'Failed to load extension {extension}.', file=sys.stderr)
-            traceback.print_exc()
-
-initial_extensions = ['modules.info']
-
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        try:
-            client.load_extension(extension)
-            print(f'{extension} подгружен!')
-        except Exception as e:
-            print(f'Failed to load extension {extension}.', file=sys.stderr)
-            traceback.print_exc()
-
-initial_extensions = ['modules.vimeworld']
-
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        try:
-            client.load_extension(extension)
-            print(f'{extension} подгружен!')
-        except Exception as e:
-            print(f'Failed to load extension {extension}.', file=sys.stderr)
-            traceback.print_exc()
-
-initial_extensions = ['modules.user']
-
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        try:
-            client.load_extension(extension)
-            print(f'{extension} подгружен!')
-        except Exception as e:
-            print(f'Failed to load extension {extension}.', file=sys.stderr)
-            traceback.print_exc()
-
-initial_extensions = ['modules.minecraft']
-
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        try:
-            client.load_extension(extension)
-            print(f'{extension} подгружен!')
-        except Exception as e:
-            print(f'Failed to load extension {extension}.', file=sys.stderr)
-            traceback.print_exc()
-
-
 
 @client.command()
 @commands.is_owner()

@@ -2,6 +2,7 @@ import discord
 import asyncio
 import requests
 import validators
+import random
 from discord.ext import commands
 from datetime import datetime
 from discord.ext.commands import Bot
@@ -113,6 +114,29 @@ class user(commands.Cog):
                         f'**Запретить присоеденение пользователя к каналу:**\n\n`.voice reject @person`\n\n**Пример:** `.voice reject @Nyan+#8782`\n\n', inline='false')
         embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
         embed.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=f"Обработала Няшка Кибер-Доки!")
+        await channel.send(embed=embed)
+
+    @commands.command() #команда СЕРВИСЫ
+    async def пароль(self, ctx):
+        chars = '+-/*!&$#?=@<>abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+        number = int('1')
+        length = int('11')
+        channel = ctx.message.channel
+        for n in range(number):
+            password =''
+            for i in range(length):
+                password += random.choice(chars)
+            await ctx.message.author.send(password)
+        embed = discord.Embed(
+            color=0x9234EB,
+            timestamp=ctx.message.created_at,
+        )
+        embed.add_field(
+            name="Генерация случайного пароля",
+            value="Пароль был отправлен тебе!",
+            inline=False)        
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
+        embed.set_footer(text=f"P.S: Кибер-Доки не сохраняет сгенерированные пароли!")
         await channel.send(embed=embed)
     
 
