@@ -93,25 +93,90 @@ class user(commands.Cog):
         emb.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=f"Обработала Няшка Кибер-Доки!")
         await ctx.send(embed = emb)
 
-    @commands.command(name="помощь", description="")
+    @commands.command()
     async def помощь(self, ctx):
         channel = ctx.message.channel
-        embed = discord.Embed(title="Помощь", description="",color=0x9234EB, timestamp=ctx.message.created_at)
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
-        embed.add_field(name=f'**Основные**', value=f'**Отображение погоды:**\n\n`+погода город`\n\n------------\n\n'
-                        f'**Отображение аватарки:**\n\n`+аватарка (упомянуть человека при желании)`\n\n------------\n\n'
-                        f'**Отображение информации о пользователе:**\n\n`+пользователь (упомянуть человека при желании)`\n\n'
-                        f'**Отображение информации о сервере:**\n\n`+сервер`\n\n'
-                        f'**Удаление сообщений пользотвателя**\n\n`+удалисообщения`\n\n**Пример:** `+удалисообщения @Nyan+#8782`\n\n------------\n\n'
-                        f'**Калькулятор:**\n\n`+посчитай (+,-,*,/)`\n\n**Пример:** `+посчитай * 6 6`\n\n------------\n\n'
+        embed = discord.Embed(
+            title="Команды",
+            color=0x9234EB,
+            timestamp=ctx.message.created_at,
         )
-        embed.add_field(name=f'**Голосовые функции**', value=f'**Заблокировать канал:**\n\n`.voice lock`\n\n------------\n\n'
-                        f'**Разблокировать канал:**\n\n`.voice unlock`\n\n------------\n\n'
-                        f'**Изменить название канала:**\n\n`.voice name <name>`\n\n**Пример:** `.voice name Амонгус`\n\n------------\n\n'
-                        f'**Изменить лимит пользователей в канале:**\n\n`.voice limit number`\n\n**Пример:** `.voice limit 2`\n\n------------\n\n'
-                        f'**Разрешить присоеденение пользователя к каналу:**\n\n`.voice permit @person`\n\n**Пример:** `.voice permit @Nyan+#8782`\n\n------------\n\n'
-                        f'**Запросить разрешение на владение каналом:**\n\n`.voice claim`\n\n**Пример:** `.voice claim`\n\n------------\n\n'
-                        f'**Запретить присоеденение пользователя к каналу:**\n\n`.voice reject @person`\n\n**Пример:** `.voice reject @Nyan+#8782`\n\n', inline='false')
+        embed.add_field(
+            name="+сервер",
+            value="Отображение информации о сервере",
+            inline=False)
+        embed.add_field(
+            name="+пользователь (пользователь)",
+            value="Отображение информации о пользователе",
+            inline=False)
+        embed.add_field(
+            name="+аватарка (пользователь)",
+            value="Отображение информации о пользователе",
+            inline=False)
+        embed.add_field(
+            name="+пароль",
+            value="Бот генерирует пароль из 11 символов для вас и отправляет вам в ЛС",
+            inline=False)
+        embed.add_field(
+            name="+vинфо",
+            value="Отображение информации о онлайне серверов VimeWorld",
+            inline=False)
+        embed.add_field(
+            name="+рандом",
+            value="Отображение псевдо-случайного числа",
+            inline=False)
+        embed.add_field(
+            name="+печенька (пользователь)",
+            value="Отправляет уведомление о получении печеньки пользователю",
+            inline=False)
+        embed.add_field(
+            name="+цитата",
+            value="Отображение случайной цитаты",
+            inline=False)
+        embed.add_field(
+            name="+кик (пользователь)",
+            value="Изгнание пользователя с сервера",
+            inline=False)
+        embed.add_field(
+            name="+бан (пользователь)",
+            value="Блокировка доступа к серверу",
+            inline=False)
+        embed.add_field(
+            name="+ник (ник)",
+            value="Изменение своего ника на сервере",
+            inline=False)
+        embed.add_field(
+            name="+голос setup",
+            value="Запуск установки голосового канала",
+            inline=False)
+        embed.add_field(
+            name="+голос блок (пользователь)",
+            value="Блокировка доступа к каналу",
+            inline=False)
+        embed.add_field(
+            name="+голос разблок (пользователь)",
+            value="Разблокировка доступа к каналу",
+            inline=False)
+        embed.add_field(
+            name="+голос разрешить (пользователь)",
+            value="Разблокировать игроку доступ к каналу",
+            inline=False)
+        embed.add_field(
+            name="+голос запретить (пользователь)",
+            value="Запретить игроку к каналу",
+            inline=False)
+        embed.add_field(
+            name="+голос лимит (цифра)",
+            value="Установка лимита пользователей в канале",
+            inline=False)
+        embed.add_field(
+            name="+голос название (название)",
+            value="Изменен",
+            inline=False)
+        embed.add_field(
+            name="+голос права",
+            value="Получение прав администрирования над каналом (Если владелец вышел из канала)",
+            inline=False)
         embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
         embed.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=f"Обработала Няшка Кибер-Доки!")
         await channel.send(embed=embed)
