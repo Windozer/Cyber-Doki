@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import lxml
 import requests
 import validators
 import configparser
@@ -9,11 +10,13 @@ class weather(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases = ['Погода','weather','pogoda','пОгода']) # Команда ПОГОДА
-    async def погода(self, ctx, *, city: str):
+    @commands.command()
+    async def weather(self, ctx, *, city: str):
         config = configparser.ConfigParser()
         config.read("config.cfg")
         configfile = "config.cfg"
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         api_key = config["OpenWeather"]["TOKEN"]
         base_url = config["OpenWeather"]["URL"]
         city_name = city
@@ -31,28 +34,28 @@ class weather(commands.Cog):
                 current_humidity = y["humidity"]
 
                 embed = discord.Embed(
-                    title=f"Город - {city_name}",
+                    title=f"{city_name}",
                     color=0x9234EB,
                     timestamp=ctx.message.created_at,
                 )
                 embed.add_field(
-                    name="Температура(C)",
+                    name=localization["Weather"]["temp"],
                     value=f"**{current_temperature_celsiuis}°C**",
                     inline=False)
                 embed.add_field(
-                    name="Влажность(%)", value=f"**{current_humidity}%**", inline=False)
+                    name=localization["Weather"]["humidity"], value=f"**{current_humidity}%**", inline=False)
                 embed.add_field(
-                    name="Атмосферное давление(hPa)",
+                    name=localization["Weather"]["pressure"],
                     value=f"**{current_pressure}hPa**",
                     inline=False)
                 embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
-                embed.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=f"Обработала Няшка Кибер-Доки!")
+                embed.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=localization["main"]["ProcessedMessage"])
 
                 await channel.send(embed=embed)
 
         else:
                 await channel.send(
-                    f"Ня, по твоему запросу я не смогла ничего найти!")
+                    localization["Weather"]["notfound"])
 
 def setup(bot):
     bot.add_cog(weather(bot))

@@ -1,0 +1,74 @@
+#Привет, это файл Русского языка для бота
+[LocaleInfo]
+Language = Русский
+Developer = Nyan+#8782
+[main]
+Presence = Я работаю (Теперь с русским языком)!
+OnStartUp = Бот запущен!
+LoadError = Не удалось загрузить модуль
+LocaleLoadMessage = Загружена русская локализация, её автор - 
+CyberDoki = Кибер-Доки
+[Phrases]
+load = загружен
+unload = успешно отгружен
+weaccept = Вы разрешили
+channelaccess = доступ к каналу!
+wedenied = Вы ограничили
+channeldenied = доступ к каналу!
+mydevis = Мой разработчик -
+ProcessedMessage = Обработала Кибер-Доки
+memberkick = Изгнание пользователя с сервера
+membernotdefined = Не упомянут пользователь!
+member = Пользователь
+kickedfromserver = изгнан с сервера!
+playerban = Блокировка пользователя
+bannedfromserver = заблокирован на сервере!
+nicknamechange = Ваш псевдоним изменен на
+useravatar = Аватар пользователя
+avatar = Аватар
+informationofuser = Информация о пользователе
+informationofserver = Информация о сервере
+quote = Цитата
+cookie = Печенька
+[Weather]
+temp = Температура
+humidity = Влажность
+pressure = Атмосферное давление(hPa)
+notfound = Ня, по твоему запросу я не смогла ничего найти!
+[Voice]
+channelddos = Ня, ты слишком часто создаёшь каналы!
+settingtimemsg = Настройка будет длиться 60 секунд
+categorynamemsg = Введите желаемое название для категории (Пример: Приватные Каналы)
+channelnamemsg = Введите желаемое имя для канала (Пример: Нажми для создания)
+timeoutmsg = Время ответа истекло!
+settingcompletemsg = Настройка прошла успешно, голосовой канал установлен!
+nameerrormsg = Вы некорректно ввели названия, используйте `+voice setup` для перезапуска настройки!
+permissionerrormsg = Ня, только создатель данного сервера может произвести настройку данного бота!
+changelimitmsg = Вы изменили лимит пользователей для канала!
+accesserrormsg = Недостаточно прав!
+channellockmsg = Канал заблокирован!
+channelunlockmsg = Канал разблокирован!
+limitsetmsg = Вы установили лимит
+channelnamechangemsg = Вы изменили название канала на
+channelownermsg = Владелец данного канала -
+[BotInfo]
+iamcyberdoki = Я - Кибер-Доки!
+botdescription = , пока-что я обладаю небольшим функционалом. Пока что я могу показать тебе погоду, а остальные функции и команды можно узнать прописав команду +help
+weongithub = Мы на GitHub!
+githubdescription = Вы можете посмотреть за моей разработкой на нашем
+[User]
+avatarloadedmsg = Ваш аватар успешно загружен!
+name = Имя:
+id = Айди пользователя:
+state = Статус:
+serverrole = Роль на сервере:
+accountcreated = Акаунт был создан:
+membersnumber = Количество участников:
+serverid = Айди сервера:
+region = Регион:
+servercreatedas = Сервер был создан:
+passgentitle = Генерация случайного пароля
+passgentext = Пароль был отправлен тебе!
+passgennotice = P.S: Кибер-Доки не сохраняет сгенерированные пароли!
+[Entertainment]
+cookiemsg = , ты получил печеньку!

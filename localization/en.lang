@@ -1,0 +1,74 @@
+#Hello, this is English localization file
+[LocaleInfo]
+Language = English
+Developer = Nyan+#8782
+[main]
+Presence = I working! (Now with English)!
+OnStartUp = Bot Started!
+LoadError = Module not loaded
+LocaleLoadMessage = English localization loaded, it's author is - 
+CyberDoki = Cyber-Doki
+[Phrases]
+load = loaded
+unload = successfully unloaded!
+weaccept = You allowed
+channelaccess = access to channel!
+wedenied = You denied
+channeldenied = access to channel!
+mydevis = My Developer -
+ProcessedMessage = Processed by Cyber-Doki
+memberkick = Kick member from server
+membernotdefined = Member not defined!
+member = User
+kickedfromserver = kicked from server!
+playerban = Block player
+bannedfromserver = blocked on server!
+nicknamechange = Your nickname has been changed
+useravatar = User avatar
+avatar = Avatar
+informationofuser = User Information
+informationofserver = Server Information
+quote = Quote
+cookie = Cookie
+[Weather]
+temp = Temperature
+humidity = Humidity
+pressure = Atmosphere pressure(hPa)
+notfound = I can't find this!
+[Voice]
+channelddos = Don't create voice channels often!
+settingtimemsg = The setup will take 60 seconds
+categorynamemsg = Enter the desired name for the category (Example: Private Channels)
+channelnamemsg = Enter the desired channel name (Example: Click to create)
+timeoutmsg = Response time expired!
+settingcompletemsg = The setup was successful, the voice channel was established!
+nameerrormsg = You entered the names incorrectly, use `+ voice setup` to restart the setup!
+permissionerrormsg = Only the creator of this server can configure this bot!
+changelimitmsg = You have changed the user limit for the channel!
+accesserrormsg = Not enough rights!
+channellockmsg = Channel locked!
+channelunlockmsg = Channel unlocked!
+limitsetmsg = You have set a limit
+channelnamechangemsg = You have changed the name of the channel to
+channelownermsg = The owner of this channel is
+[BotInfo]
+iamcyberdoki = I'am - Cyber-Doki
+botdescription = , for now, I have a little functionality. So far, I can show you the weather, and the rest of the functions and commands can be found by typing the command +help
+weongithub = We on GitHub!
+githubdescription = You can see on source code in our 
+[User]
+avatarloadedmsg = Your avatar has been uploaded successfully!
+name = Name:
+id = User ID:
+state = State:
+serverrole = Role on Server:
+accountcreated = Creation Date:
+membersnumber = Member quantity:
+serverid = Server ID:
+region = Region:
+servercreatedas = Creation Date:
+passgentitle = Generating a random password
+passgentext = The password has been sent to you!
+passgennotice = P.S: Cyber-Docks does not save generated passwords!
+[Entertainment]
+cookiemsg = , you got a cookie!

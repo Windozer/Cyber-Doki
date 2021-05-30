@@ -4,6 +4,7 @@ from discord.ext import commands
 import traceback
 import sqlite3
 import validators
+import configparser
 
 
 class voice(commands.Cog):
@@ -17,6 +18,10 @@ class voice(commands.Cog):
         guildID = member.guild.id
         c.execute("SELECT voiceChannelID FROM guild WHERE guildID = ?", (guildID,))
         voice=c.fetchone()
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         if voice is None:
             pass
         else:
@@ -28,7 +33,7 @@ class voice(commands.Cog):
                     if cooldown is None:
                         pass
                     else:
-                        await member.send("Ня, ты слишком часто создаёшь каналы!")
+                        await member.send(localization["Voice"]["channelddos"])
                         await asyncio.sleep(15)
                     c.execute("SELECT voiceCategoryID FROM guild WHERE guildID = ?", (guildID,))
                     voice=c.fetchone()
@@ -73,46 +78,36 @@ class voice(commands.Cog):
         conn.commit()
         conn.close()
 
-    @commands.command()
-    async def help(self, ctx):
-        embed = discord.Embed(title="Помощь", description="",color=0x7289da)
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
-        embed.add_field(name=f'**Команды**', value=f'**Заблокировать канал:**\n\n`.voice lock`\n\n------------\n\n'
-                        f'**Разблокировать канал:**\n\n`.voice unlock`\n\n------------\n\n'
-                        f'**Изменить название канала:**\n\n`.voice name <name>`\n\n**Пример:** `.voice name Амонгус`\n\n------------\n\n'
-                        f'**Изменить лимит пользователей в канале:**\n\n`.voice limit number`\n\n**Пример:** `.voice limit 2`\n\n------------\n\n'
-                        f'**Разрешить присоеденение пользователя к каналу:**\n\n`.voice permit @person`\n\n**Пример:** `.voice permit @Nyan+#8782`\n\n------------\n\n'
-                        f'**Запросить разрешение на владение каналом:**\n\n`.voice claim`\n\n**Пример:** `.voice claim`\n\n------------\n\n'
-                        f'**Запретить присоеденение пользователя к каналу:**\n\n`.voice reject @person`\n\n**Пример:** `.voice reject @Nyan+#8782`\n\n', inline='false')
-        embed.set_footer(icon_url="https://cdn.discordapp.com/avatars/780510408707932180/89c2612e9227173f8534b47817290427.png", text=f"Обработала Няшка Кибер-Доки!")
-        await ctx.channel.send(embed=embed)
-
     @commands.group()
-    async def голос(self, ctx):
+    async def voice(self, ctx):
         pass
 
-    @голос.command()
+    @voice.command()
     async def setup(self, ctx):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         guildID = ctx.guild.id
         id = ctx.message.author.id
         if ctx.message.author.id == ctx.guild.owner_id:
             def check(m):
                 return m.author.id == ctx.message.author.id
-            await ctx.channel.send("**Настройка будет длиться 60 секунд**")
-            await ctx.channel.send(f"**Введите желаемое название для категории:(пример: Приватные Каналы)**")
+            await ctx.channel.send(localization["Voice"]["settingtimemsg"])
+            await ctx.channel.send(localization["Voice"]["categorynamemsg"])
             try:
                 category = await self.bot.wait_for('message', check=check, timeout = 60.0)
             except asyncio.TimeoutError:
-                await ctx.channel.send('Время ответа истекло!')
+                await ctx.channel.send(localization["Voice"]["timeoutmsg"])
             else:
                 new_cat = await ctx.guild.create_category_channel(category.content)
-                await ctx.channel.send('**Введите желаемое имя для канала: (пример: Нажми для создания)**')
+                await ctx.channel.send(localization["Voice"]["channelnamemsg"])
                 try:
                     channel = await self.bot.wait_for('message', check=check, timeout = 60.0)
                 except asyncio.TimeoutError:
-                    await ctx.channel.send('Время ответа истекло!')
+                    await ctx.channel.send(localization["Voice"]["timeoutmsg"])
                 else:
                     try:
                         channel = await ctx.guild.create_voice_channel(channel.content, category=new_cat)
@@ -122,28 +117,32 @@ class voice(commands.Cog):
                             c.execute ("INSERT INTO guild VALUES (?, ?, ?, ?)",(guildID,id,channel.id,new_cat.id))
                         else:
                             c.execute ("UPDATE guild SET guildID = ?, ownerID = ?, voiceChannelID = ?, voiceCategoryID = ? WHERE guildID = ?",(guildID,id,channel.id,new_cat.id, guildID))
-                        await ctx.channel.send("**Настройка прошла успешно, голосовой канал установлен!**")
+                        await ctx.channel.send(localization["Voice"]["settingcompletemsg"])
                     except:
-                        await ctx.channel.send("Вы некорректно ввели названия \nИспользуйте `.voice setup` для перезапуска настройки!")
+                        await ctx.channel.send(localization["Voice"]["nameerrormsg"])
         else:
-            await ctx.channel.send(f"{ctx.author.mention} Ня, только создатель данного сервера может произвести настройку данного бота!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["permissionerrormsg"])
         conn.commit()
         conn.close()
 
-    @commands.command()
+    @voice.command()
     async def setlimit(self, ctx, num):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
-        if ctx.author.id == ctx.guild.owner.id or ctx.author.id == 151028268856770560:
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
+        if ctx.author.id == ctx.guild.owner.id or ctx.author.id == 370623336029487104:
             c.execute("SELECT * FROM guildSettings WHERE guildID = ?", (ctx.guild.id,))
             voice=c.fetchone()
             if voice is None:
                 c.execute("INSERT INTO guildSettings VALUES (?, ?, ?)", (ctx.guild.id,f"{ctx.author.name}'s channel",num))
             else:
                 c.execute("UPDATE guildSettings SET channelLimit = ? WHERE guildID = ?", (num, ctx.guild.id))
-            await ctx.send("Вы изменили лимит пользователей для канала!")
+            await ctx.send(localization["Voice"]["changelimitmsg"])
         else:
-            await ctx.channel.send(f"{ctx.author.mention} Ня, только создатель данного сервера может изменить настройки бота!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["permissionerrormsg"])
         conn.commit()
         conn.close()
 
@@ -151,69 +150,85 @@ class voice(commands.Cog):
     async def info_error(self, ctx, error):
         print(error)
 
-    @голос.command()
-    async def блок(self, ctx):
+    @voice.command()
+    async def lock(self, ctx):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         id = ctx.author.id
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice=c.fetchone()
         if voice is None:
-            await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
         else:
             channelID = voice[0]
             role = discord.utils.get(ctx.guild.roles, name='@everyone')
             channel = self.bot.get_channel(channelID)
             await channel.set_permissions(role, connect=False,read_messages=True)
-            await ctx.channel.send(f'{ctx.author.mention} Канал заблокирован! 🔒')
+            await ctx.channel.send(f'{ctx.author.mention} ' + localization["Voice"]["channellockmsg"])
         conn.commit()
         conn.close()
 
-    @голос.command()
-    async def разблок(self, ctx):
+    @voice.command()
+    async def unlock(self, ctx):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         id = ctx.author.id
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice=c.fetchone()
         if voice is None:
-            await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
         else:
             channelID = voice[0]
             role = discord.utils.get(ctx.guild.roles, name='@everyone')
             channel = self.bot.get_channel(channelID)
             await channel.set_permissions(role, connect=True,read_messages=True)
-            await ctx.channel.send(f'{ctx.author.mention} Канал разблокирован! 🔓')
+            await ctx.channel.send(f'{ctx.author.mention} ' + localization["Voice"]["channelunlockmsg"])
         conn.commit()
         conn.close()
 
-    @голос.command(aliases=["allow"])
-    async def разрешить(self, ctx, member : discord.Member):
+    @voice.command()
+    async def allow(self, ctx, member : discord.Member):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         id = ctx.author.id
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice=c.fetchone()
         if voice is None:
-            await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
             await channel.set_permissions(member, connect=True)
-            await ctx.channel.send(f'{ctx.author.mention} Вы разрешили {member.name} доступ к каналу! ✅')
+            await ctx.channel.send(f'{ctx.author.mention} ' + localization["Phrases"]["weaccept"] + '{member.name} ' + localization["Phrases"]["channelaccess"])
         conn.commit()
         conn.close()
 
-    @голос.command(aliases=["deny"])
-    async def запретить(self, ctx, member : discord.Member):
+    @voice.command()
+    async def deny(self, ctx, member : discord.Member):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         id = ctx.author.id
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         guildID = ctx.guild.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice=c.fetchone()
         if voice is None:
-            await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
@@ -224,26 +239,30 @@ class voice(commands.Cog):
                     channel2 = self.bot.get_channel(voice[0])
                     await member.move_to(channel2)
             await channel.set_permissions(member, connect=False,read_messages=True)
-            await ctx.channel.send(f'{ctx.author.mention} Вы ограничили {member.name} доступ к каналу! ❌')
+            await ctx.channel.send(f'{ctx.author.mention} ' + localization["Phrases"]["wedenied"] + '{member.name} ' + localization["Phrases"]["channeldenied"])
         conn.commit()
         conn.close()
 
 
 
-    @голос.command()
-    async def лимит(self, ctx, limit):
+    @voice.command()
+    async def limit(self, ctx, limit):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         id = ctx.author.id
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice=c.fetchone()
         if voice is None:
-            await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
             await channel.edit(user_limit = limit)
-            await ctx.channel.send(f'{ctx.author.mention} Вы установили лимит '+ '{}!'.format(limit))
+            await ctx.channel.send(f'{ctx.author.mention} '+ localization["Voice"]["limitsetmsg"] + '{}!'.format(limit))
             c.execute("SELECT channelName FROM userSettings WHERE userID = ?", (id,))
             voice=c.fetchone()
             if voice is None:
@@ -254,20 +273,24 @@ class voice(commands.Cog):
         conn.close()
 
 
-    @голос.command()
-    async def название(self, ctx,*, name):
+    @voice.command()
+    async def name(self, ctx,*, name):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         id = ctx.author.id
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice=c.fetchone()
         if voice is None:
-            await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+            await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
             await channel.edit(name = name)
-            await ctx.channel.send(f'{ctx.author.mention} Вы изменили название канала на '+ '{}!'.format(name))
+            await ctx.channel.send(f'{ctx.author.mention} ' + " " + localization["Voice"]["channelnamechangemsg"] + '{}!'.format(name))
             c.execute("SELECT channelName FROM userSettings WHERE userID = ?", (id,))
             voice=c.fetchone()
             if voice is None:
@@ -277,11 +300,15 @@ class voice(commands.Cog):
         conn.commit()
         conn.close()
 
-    @голос.command()
-    async def права(self, ctx):
+    @voice.command()
+    async def rights(self, ctx):
         x = False
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        config = configparser.ConfigParser()
+        config.read("config.cfg")
+        localization = configparser.ConfigParser()
+        localization.read("localization/" + config["discord"]["Localization"] + ".lang", encoding="cp1251")
         channel = ctx.author.voice.channel
         if channel == None:
             await ctx.channel.send(f"{ctx.author.mention} Вы не находитесь в канале!")
@@ -290,12 +317,12 @@ class voice(commands.Cog):
             c.execute("SELECT userID FROM voiceChannel WHERE voiceID = ?", (channel.id,))
             voice=c.fetchone()
             if voice is None:
-                await ctx.channel.send(f"{ctx.author.mention} Недостаточно прав!")
+                await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["accesserrormsg"])
             else:
                 for data in channel.members:
                     if data.id == voice[0]:
                         owner = ctx.guild.get_member(voice [0])
-                        await ctx.channel.send(f"{ctx.author.mention} Владелец данного канала - {owner.mention}!")
+                        await ctx.channel.send(f"{ctx.author.mention} " + localization["Voice"]["channelownermsg"] + f' {owner.mention}')
                         x = True
                 if x == False:
                     await ctx.channel.send(f"{ctx.author.mention} Вы теперь владелец данного канала!")
